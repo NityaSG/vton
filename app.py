@@ -1,7 +1,12 @@
 from flask import Flask, request, jsonify
 import requests
+import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
+
+# Load environment variables from .env file
+load_dotenv()
 
 @app.route('/virtual-try-on', methods=['POST'])
 def virtual_try_on():
@@ -20,7 +25,7 @@ def virtual_try_on():
 
     headers = {
         "content-type": "application/x-www-form-urlencoded",
-        "X-RapidAPI-Key": "YOUR_RAPIDAPI_KEY_HERE",  # Replace YOUR_RAPIDAPI_KEY_HERE with your actual RapidAPI Key
+        "X-RapidAPI-Key": os.getenv('RAPIDAPI_KEY'),  # Load the API key from environment variables
         "X-RapidAPI-Host": "texel-virtual-try-on.p.rapidapi.com"
     }
 
@@ -33,7 +38,4 @@ def virtual_try_on():
     except requests.exceptions.RequestException as e:
         # Return the error if something went wrong with the request
         return jsonify({'error': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)
 
